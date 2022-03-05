@@ -3,9 +3,8 @@ package com.example.bookmanager.domain;
 import lombok.*;
 
 import java.time.LocalDateTime;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import java.util.List;
+import javax.persistence.*;
 
 
 @NoArgsConstructor
@@ -29,6 +28,7 @@ public class User {
 
     private LocalDateTime updatedAt;
 
-
+//    @OneToMany(fetch = FetchType.EAGER)
+//    private List<Address> address;
 
 }
