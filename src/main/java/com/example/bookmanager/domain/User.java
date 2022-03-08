@@ -8,6 +8,8 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import javax.persistence.*;
 
 
@@ -21,9 +23,9 @@ import javax.persistence.*;
 @Entity
 @EntityListeners(value = {UserEntityListener.class})
 //@Table(name = "user", indexes = {@Index(columnList = "name")}, uniqueConstraints = {@UniqueConstraint(columnNames = {"email"})})
-public class User extends BaseEntity implements Auditable {
+public class User extends BaseEntity {
     @Id //PK값
-    @GeneratedValue(strategy=GenerationType.SEQUENCE) //숫자값이 순차적으로 올라가도록
+    @GeneratedValue(strategy=GenerationType.IDENTITY) //숫자값이 순차적으로 올라가도록
     private  Long id;
 
     @NonNull
@@ -36,6 +38,17 @@ public class User extends BaseEntity implements Auditable {
     @Enumerated(value = EnumType.STRING)
     private Gender gender;
 
+    @OneToMany(fetch = FetchType.EAGER)
+    @JoinColumn(name = "user_id", insertable = false, updatable = false)
+    @ToString.Exclude
+    private List<UserHistory> userHistories = new ArrayList<>();
+
+    @OneToMany
+    @JoinColumn(name = "user_id")
+    @ToString.Exclude
+    private List<Review> reviews = new ArrayList<>();
+
+
 //    @Column(updatable = false) //(nullable = false) // NotNull 컬럼
 //    @CreatedDate
 //    private LocalDateTime createdAt;
@@ -44,8 +57,8 @@ public class User extends BaseEntity implements Auditable {
 //    @LastModifiedDate
 //    private LocalDateTime updatedAt;
 
-    @Transient //영속성처리에서 제외 -> DB에 반영X
-    private String testData;
+//    @Transient //영속성처리에서 제외 -> DB에 반영X
+//    private String testData;
 
 //    @OneToMany(fetch = FetchType.EAGER)
 //    private List<Address> address;
