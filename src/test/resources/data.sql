@@ -1,4 +1,3 @@
-//PK인 id값이 증가되도록 매칭 save를 할 경우, 겹칠 수 있기 때문에
 -- call next value for hibernate_sequence;
 insert into user (`id`, `name`, `email`, `created_at`, `updated_at`) values (1, 'martin', 'martin@fastcampus.com', now(), now());
 
