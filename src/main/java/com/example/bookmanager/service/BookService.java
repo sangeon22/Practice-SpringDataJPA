@@ -43,6 +43,7 @@ public class BookService {
 //        throw new RuntimeException("오류가 나서 DB Commit이 발생하지 않습니다.");
     }
 
+
     @Transactional(isolation = Isolation.SERIALIZABLE)
     public void get(Long id){
         System.out.println(">>> "+bookRepository.findById(id));
