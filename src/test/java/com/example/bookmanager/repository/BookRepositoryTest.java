@@ -7,7 +7,11 @@ import com.example.bookmanager.domain.User;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -84,7 +88,7 @@ class BookRepositoryTest {
 
         System.out.println("books : " + bookRepository.findAll());
         System.out.println("publishers : " + publisherRepository.findAll());
-        System.out.println("book3-publisher : "+bookRepository.findById(1L).get().getPublisher());
+        System.out.println("book3-publisher : " + bookRepository.findById(1L).get().getPublisher());
     }
 
     @Test
@@ -98,7 +102,7 @@ class BookRepositoryTest {
     }
 
     @Test
-    void softDelete(){
+    void softDelete() {
         bookRepository.findAll().forEach(System.out::println);
         System.out.println(bookRepository.findById(3L));
 
@@ -108,7 +112,35 @@ class BookRepositoryTest {
 //        bookRepository.findByCategoryIsNullAndDeletedFalse().forEach(System.out::println);
     }
 
+    @Test
+    void queryTest() {
+//        bookRepository.findAll().forEach(System.out::println);
+//        System.out.println("findByCategoryIsNullAndNameEqualsAndCreatedAtGreaterThanEqualAndUpdatedAtGreaterThanEqual : " +
+//                bookRepository.findByCategoryIsNullAndNameEqualsAndCreatedAtGreaterThanEqualAndUpdatedAtGreaterThanEqual(
+//                        "JPA 초격차 패키지",
+//                        LocalDateTime.now().minusDays(1L),
+//                        LocalDateTime.now().minusDays(1L)
+//                ));
 
+        System.out.println("findByNameRecently : " +
+                bookRepository.findByNameRecently(
+                        "JPA 초격차 패키지",
+                        LocalDateTime.now().minusDays(1L),
+                        LocalDateTime.now().minusDays(1L)));
+
+        System.out.println(bookRepository.findBookNameAndCategory());
+
+        bookRepository.findBookNameAndCategory().forEach(b -> {
+            System.out.println(b.getName() + " : " + b.getCategory());
+        });
+
+        bookRepository.findBookNameAndCategory(PageRequest.of(1, 1)).forEach(bookNameAndCategory ->
+                System.out.println(bookNameAndCategory.getName() + " : " + bookNameAndCategory.getCategory()));
+
+        bookRepository.findBookNameAndCategory(PageRequest.of(0, 1)).forEach(bookNameAndCategory ->
+                System.out.println(bookNameAndCategory.getName() + " : " + bookNameAndCategory.getCategory()));
+
+    }
 
     private void givenBookAndReview() {
         givenReview(givenUser(), givenBook(givenPublisher()));
